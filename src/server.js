@@ -1,12 +1,15 @@
 const express = require("express");
+require("dotenv").config();
+require("./config/db").connect();
+const authRoutes = require("./routes/auth.routes");
+const filesRoutes = require("./routes/files.routes");
+
 const app = express();
+app.use(express.json());
 
-app.get("/super-secure-resource", (req, res) => {
-  res
-    .status(401)
-    .json({ message: "You need to be logged in to access this resource" });
-});
+app.use("/auth", authRoutes);
+app.use("/files", filesRoutes);
 
-app.listen(5000, () => {
-  console.log("Server running on localhost:3001");
+app.listen(process.env.SERVER_PORT | 5000, () => {
+  console.log(`Server running on localhost:${process.env.SERVER_PORT}`);
 });
